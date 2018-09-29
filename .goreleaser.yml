@@ -1,0 +1,35 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+builds:
+  - goos:
+      - darwin
+    goarch:
+      - amd64
+    ldflags: -s -w -X main.Version={{.Version}} -X main.BuildTime={{.Date}}
+
+archive:
+  format: tar.gz
+  replacements:
+    amd64: amd64
+    darwin: macOS
+
+changelog:
+  filters:
+    exclude:
+      - "^small"
+      - add a TODO
+      - update README
+  sort: asc
+
+sign:
+  artifacts: checksum
+
+brew:
+  github:
+    owner: blacktop
+    name: homebrew-tap
+  folder: Formula
+  homepage: "https://github.com/blacktop/go-rop"
+  description: "ROP Gadget Finder."
+  test: |
+    system "#{bin}/go-rop --version"
