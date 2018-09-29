@@ -39,11 +39,22 @@ lint: ## Run all the linters
 		./...
 		markdownfmt -w README.md
 
-release: ## Create a new release from the VERSION
+.PHONY: dry_release
+dry_release:
+	goreleaser --skip-publish --rm-dist --skip-validate
+
+.PHONY: bump
+bump: ## Incriment version patch number
+	@echo " > Bumping VERSION"
+	@hack/bump/version -p $(shell cat VERSION) > VERSION
+	@git commit -am "bumping version to $(VERSION)"
+	@git push
+
+.PHONY: release
+release: bump ## Create a new release from the VERSION
 	@echo " > Creating Release"
-	git tag -a ${VERSION} -m ${MESSAGE}
-	git push origin ${VERSION}
-	goreleaser --rm-dist
+	@hack/make/release $(shell cat VERSION)
+	@goreleaser --rm-dist
 
 destroy: ## Remove release from the VERSION
 	@echo " > Deleting Release"
