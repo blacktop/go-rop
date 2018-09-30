@@ -23,11 +23,3 @@ jobs:
       - setup_remote_docker
       # specify any bash command here prefixed with `run: `
       - run: go run *.go --help
-      # - run:
-      #     name: Load image into docker
-      #     command: |
-      #       docker load -i blacktop_bro.tar
-      # - run:
-      #     name: Test docker image
-      #     command: |
-      #       docker run blacktop/bro -v

@@ -64,6 +64,9 @@ destroy: ## Remove release from the VERSION
 
 ci: lint test ## Run all the tests and code checks
 
+lzssdec.so: lzssdec.cpp
+    clang++ -o lzssdec.so lzssdec.cpp -std=c++17 -O3 -Wall -Wextra -fPIC -shared
+
 build: ## Build a beta version of malice
 	@echo " > Building Binaries"
 	goreleaser --skip-publish --rm-dist --skip-validate

@@ -1,12 +1,39 @@
 package main
 
+// #cgo LDFLAGS: -L. -llibrary
+// #include "library-bridge.h"
 import (
+	"C"
+	"debug/macho"
+	"fmt"
 	"log"
 
 	"github.com/bnagy/gapstone"
 )
 
 func main() {
+
+	fatFile, err := macho.OpenFat("/Users/blacktop/Downloads/levin/jtool2")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, arch := range fatFile.Arches {
+		fmt.Println(arch.FatArchHeader)
+		for _, section := range arch.Sections {
+			fmt.Println(section)
+		}
+
+		// for _, sym := range arch.Symtab.Syms {
+		// 	fmt.Println(sym.Name)
+		// }
+	}
+
+	kcache, err := macho.Open("kernel")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(kcache.FileHeader)
 
 	engine, err := gapstone.New(
 		gapstone.CS_ARCH_X86,
